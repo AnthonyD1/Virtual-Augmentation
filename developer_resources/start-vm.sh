@@ -15,5 +15,7 @@ qemu-system-x86_64 \
 	-vga qxl \
 	-spice port=5900,addr=127.0.0.1,disable-ticketing \
 	-device virtio-serial-pci \
-	-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 -chardev spicevmc,id=spicechannel0,name=vdagent \
-	-device AC97,id=sound0,bus=pci.0,addr=0x4
+	-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+	-chardev spicevmc,id=spicechannel0,name=vdagent \
+	-device AC97,id=sound0,bus=pci.0,addr=0x4 \
+	-monitor stdio
