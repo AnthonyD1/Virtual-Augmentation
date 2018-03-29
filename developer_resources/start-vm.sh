@@ -6,6 +6,7 @@
 RAM=2048
 
 QEMU_AUDIO_DRV=spice
+echo "Open your SPICE client and point it at localhost:5900"
 qemu-system-x86_64 \
 	-drive media=disk,file="$1",format=qcow2,index=0 \
 	-m $RAM \
