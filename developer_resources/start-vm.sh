@@ -17,5 +17,5 @@ qemu-system-x86_64 \
 	-device virtio-serial-pci \
 	-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
 	-chardev spicevmc,id=spicechannel0,name=vdagent \
-	-device AC97,id=sound0,bus=pci.0,addr=0x4 \
+	-device AC97,id=sound0,bus=pci.0,addr=0x5 \
 	-monitor stdio
