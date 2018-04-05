@@ -13,7 +13,7 @@ public class ImageCapture : MonoBehaviour {
     private Resolution cameraResolution;
     private CameraParameters cameraParameters;
 
-    private bool photoCaputreModeOn = false;
+    private bool photoCaptureModeOn = false;
 
 	// Use this for initialization
 	void Start () {
@@ -38,14 +38,14 @@ public class ImageCapture : MonoBehaviour {
     }
 
     void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result) {
-        photoCaputreModeOn = true;
+        photoCaptureModeOn = true;
         Debug.Log("Photo capture mode is on");
     }
 
-    void Caputre() {
-        if (photoCaputreModeOn) {
+    void Capture() {
+        if (photoCaptureModeOn) {
             photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
-            Debug.Log("Photo caputre async job started");
+            Debug.Log("Photo capture async job started");
         }
     }
 
@@ -69,6 +69,6 @@ public class ImageCapture : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //May want to make it not do it every single frame
-        Caputre();
+        Capture();
 	}
 }
