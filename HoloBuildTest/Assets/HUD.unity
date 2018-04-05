@@ -493,8 +493,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433bab2d6e53cab469dab14960b46313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverAddress: 127.0.0.1
-  serverPort: 80
+  serverAddress: 10.201.4.245
+  serverPort: 6666
 --- !u!114 &2121571817
 MonoBehaviour:
   m_ObjectHideFlags: 0
