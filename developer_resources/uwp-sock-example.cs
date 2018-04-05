@@ -8,7 +8,6 @@ using System.Threading;
 using UnityEngine;
 using System.Threading.Tasks;
 
-
 public class USTrackingTcpClient : MonoBehaviour {
 
     public USTrackingManager TrackingManager;
