@@ -490,12 +490,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2121571814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81e339f0c936eb54385998e12ecabd5e, type: 3}
+  m_Script: {fileID: 11500000, guid: 433bab2d6e53cab469dab14960b46313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  texture: {fileID: 0}
-  server: 127.0.0.1
-  port: 0
+  serverAddress: 127.0.0.1
+  serverPort: 80
 --- !u!114 &2121571817
 MonoBehaviour:
   m_ObjectHideFlags: 0
