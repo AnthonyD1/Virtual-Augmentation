@@ -4,12 +4,30 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class HTTPImageXfer : MonoBehaviour {
-    public string serverAddress = "127.0.0.1";
-    public int serverPort = 80;
+    public string serverAddress;
+    public string serverPath;
 
-	// Use this for initialization
-	void Start () {
-        //Nothing
+    void PostText(string textData) {
+        Debug.Log("PostText function called");
+
+        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, textData);
+        Debug.Log("UnityWebRequest created");
+
+        www.SendWebRequest();
+        Debug.Log("Send web request completed");
+
+        if (www.isNetworkError || www.isHttpError) {
+            Debug.Log("www-error: " + www.error);
+        } else {
+            Debug.Log("POST completed");
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
+        Debug.Log("HTTPImageXfer Started");
+        PostText("Microsoft sucks");
+        Debug.Log("Post text function completed");
 	}
 	
 	// Update is called once per frame
@@ -17,18 +35,23 @@ public class HTTPImageXfer : MonoBehaviour {
 		//Nothing
 	}
 
-    public IEnumerator Post(byte[] jpegData) {
+    public void PostJpeg(byte[] jpegData) {
+        Debug.Log("PostJpeg called");
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        formData.Add(new MultipartFormDataSection(jpegData));
+        formData.Add(new MultipartFormDataSection("file", jpegData));
+        Debug.Log("PostJpeg: FormData object created successfully");
 
-        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPort.ToString(), formData);
-        yield return www.SendWebRequest();
+        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, formData);
+        www.SendWebRequest();
+        Debug.Log("PostJpeg: UnityWebRequest completed");
 
         if (www.isNetworkError || www.isHttpError) {
-            Debug.Log(www.error);
+            Debug.Log("PostJpeg: www-error: " + www.error);
         } else {
-            Debug.Log("Form upload complete!");
+            Debug.Log("PostJpeg: Form upload complete!");
         }
     }
+
+    
 }

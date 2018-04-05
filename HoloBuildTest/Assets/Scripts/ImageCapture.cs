@@ -11,27 +11,42 @@ public class ImageCapture : MonoBehaviour {
     Texture2D targetTexture = null;
 
     private Resolution cameraResolution;
+    private CameraParameters cameraParameters;
+
+    private bool photoCaputreModeOn = false;
 
 	// Use this for initialization
 	void Start () {
+        Debug.Log("Photo capture script started");
+
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
         targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height);
-	}
 
-    void Caputre() {
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject) {
             photoCaptureObject = captureObject;
-            CameraParameters cameraParameters = new CameraParameters();
+            cameraParameters = new CameraParameters();
 
             cameraParameters.hologramOpacity = 0.0f;
             cameraParameters.cameraResolutionWidth = cameraResolution.width;
             cameraParameters.cameraResolutionHeight = cameraResolution.height;
             cameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
-
-            photoCaptureObject.StartPhotoModeAsync(cameraParameters, delegate (PhotoCapture.PhotoCaptureResult result) {
-                photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
-            });
         });
+
+        photoCaptureObject.StartPhotoModeAsync(cameraParameters, OnPhotoModeStarted);
+
+        Debug.Log("Photo capture script Start() completed");
+    }
+
+    void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result) {
+        photoCaputreModeOn = true;
+        Debug.Log("Photo capture mode is on");
+    }
+
+    void Caputre() {
+        if (photoCaputreModeOn) {
+            photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
+            Debug.Log("Photo caputre async job started");
+        }
     }
 
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame) {
@@ -48,12 +63,12 @@ public class ImageCapture : MonoBehaviour {
         HTTPImageXfer hTTPImageXfer = holoLensCamera.GetComponent<HTTPImageXfer>();
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
-        hTTPImageXfer.Post(jpegData);
+        hTTPImageXfer.PostJpeg(jpegData);
     }
 	
 	// Update is called once per frame
 	void Update () {
         //May want to make it not do it every single frame
-        this.Caputre();
+        Caputre();
 	}
 }
