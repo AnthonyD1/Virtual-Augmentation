@@ -12,7 +12,7 @@ using System.Threading;
 
 public class TCP_ImageSend : MonoBehaviour
 {
-
+    /*
     public RenderTexture sendRenderTextureMain;
     private Texture2D sendImage2DMain;
 
@@ -20,7 +20,9 @@ public class TCP_ImageSend : MonoBehaviour
     int sent;
     IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
     Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    */
 
+    /*
     void Start()
     {
         sendImage2DMain = new Texture2D(sendRenderTextureMain.width, sendRenderTextureMain.height, TextureFormat.RGB24, false);
@@ -34,6 +36,9 @@ public class TCP_ImageSend : MonoBehaviour
             Debug.Log(e.ToString());
         }
     }
+    */
+
+
     void Update()
     {
         RenderTexture.active = sendRenderTextureMain;
