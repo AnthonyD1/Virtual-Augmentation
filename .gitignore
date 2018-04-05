@@ -36,3 +36,6 @@ sysinfo.txt
 
 # Build Folder
 App/
+
+# Some visual studio shit
+.vs/
