@@ -39,12 +39,10 @@ public class ImageCapture : MonoBehaviour {
 
         GameObject holoLensCamera = GameObject.Find("HoloLensCamera");
 
-#if !UNITY_EDITOR
         TCPImageSend tCPImageSend = holoLensCamera.GetComponent<TCPImageSend>();
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         photoCaptureFrame.UploadImageDataToTexture(tCPImageSend.texture);
-#endif
     }
 	
 	// Update is called once per frame
