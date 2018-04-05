@@ -15854,12 +15854,12 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "D:\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
       "projectName": "HoloBuildTest",
-      "projectPath": "D:\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
-      "projectJsonPath": "D:\\HoloBuildTest\\App\\HoloBuildTest\\project.json",
+      "projectPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
+      "projectJsonPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\project.json",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\HoloBuildTest\\App\\HoloBuildTest\\obj\\",
+      "outputPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\obj\\",
       "projectStyle": "ProjectJson",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\"
@@ -15876,8 +15876,8 @@
       "frameworks": {
         "uap10.0.10240": {
           "projectReferences": {
-            "D:\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj": {
-              "projectPath": "D:\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj"
+            "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj": {
+              "projectPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj"
             }
           }
         }

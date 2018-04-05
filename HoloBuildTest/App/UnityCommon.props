@@ -1,8 +1,8 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <UnityWSASolutionName>HoloBuildTest</UnityWSASolutionName>
-        <UnityWSASolutionDir>D:\HoloBuildTest\App\</UnityWSASolutionDir>
-        <UnityProjectDir>D:\HoloBuildTest\</UnityProjectDir>
+        <UnityWSASolutionDir>C:\Users\User\Virtual-Augmentation\HoloBuildTest\App\</UnityWSASolutionDir>
+        <UnityProjectDir>C:\Users\User\Virtual-Augmentation\HoloBuildTest\</UnityProjectDir>
         <UnityWSAPlayerDir>C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport\</UnityWSAPlayerDir>
         <UnityWSAToolsDir>$(UnityWSASolutionDir)Unity\Tools\</UnityWSAToolsDir>
     </PropertyGroup>
