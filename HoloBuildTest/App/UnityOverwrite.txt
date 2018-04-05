@@ -8,7 +8,7 @@
 HoloBuildTest.sln: modified
 GeneratedProjects\UWP\Assembly-CSharp\project.json: 1D02BC64BAC0D041019673A1C4C51737
 HoloBuildTest\App.cs: CCEE1930880DA66B04D4BBB98CE2B871
-HoloBuildTest\HoloBuildTest.csproj: 3E32793784975D34D973D1512B89EC52
+HoloBuildTest\HoloBuildTest.csproj: 23EDFAF5ABCE7EF27715DF7ABDD04888
 HoloBuildTest\HoloBuildTest.csproj.user: modified
 HoloBuildTest\Package.appxmanifest: 8EF70AF6CCB952C460FB2A0A78BA07E4
 HoloBuildTest\project.json: 1D02BC64BAC0D041019673A1C4C51737

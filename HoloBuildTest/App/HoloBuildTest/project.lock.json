@@ -12742,7 +12742,7 @@
       ]
     },
     "Microsoft.NETCore.Runtime.CoreCLR-arm/1.0.0": {
-      "sha512": "hoJfIl981eXwn9Tz8onO/J1xaYApIfp/YrhjSh9rRhml1U5Wj80LBgyp/6n+KI3VlvcAraThhnHnCTp+M3Uh+w==",
+      "sha512": "vUQyaKbHCa7BJAAzdfCP2FfBYOSt0YnDw7VMJLmD1/k68HIJgw1QO7GAfHhqoa39zkkvimC47QBH27wG4C5OGQ==",
       "type": "package",
       "path": "microsoft.netcore.runtime.coreclr-arm/1.0.0",
       "files": [
@@ -15849,23 +15849,23 @@
     "UAP,Version=v10.0.10240": []
   },
   "packageFolders": {
-    "C:\\Users\\Billy G\\.nuget\\packages\\": {},
+    "C:\\Users\\User\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {}
   },
   "project": {
     "restore": {
-      "projectUniqueName": "C:\\Users\\Billy G\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
       "projectName": "HoloBuildTest",
-      "projectPath": "C:\\Users\\Billy G\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
-      "projectJsonPath": "C:\\Users\\Billy G\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\project.json",
-      "packagesPath": "C:\\Users\\Billy G\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Billy G\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\obj\\",
+      "projectPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\HoloBuildTest.csproj",
+      "projectJsonPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\project.json",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\HoloBuildTest\\obj\\",
       "projectStyle": "ProjectJson",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Billy G\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
@@ -15876,8 +15876,8 @@
       "frameworks": {
         "uap10.0.10240": {
           "projectReferences": {
-            "C:\\Users\\Billy G\\Virtual-Augmentation\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj": {
-              "projectPath": "C:\\Users\\Billy G\\Virtual-Augmentation\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj"
+            "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj": {
+              "projectPath": "C:\\Users\\User\\Virtual-Augmentation\\HoloBuildTest\\App\\GeneratedProjects\\UWP\\Assembly-CSharp\\Assembly-CSharp.csproj"
             }
           }
         }
