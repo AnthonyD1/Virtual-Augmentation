@@ -67,7 +67,7 @@ void cameraDetect(VideoCapture & cap, People &people){
   cap.open(0);
   if(!cap.isOpened()){
     cout << "Couldn't find the webcam..." << endl;
-    return -1;
+    exit(0);
   }
   while(true){
     cap >> img;

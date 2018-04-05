@@ -1,10 +1,16 @@
 import socket,io,Image
 from array import array
 
+#Convert the bytes of encoding image data into proper encoding.
 def save_image(byts):
     image = Image.open(io.BytesIO(byts))
     image.save("nutt.jpg")
 
+'''
+A badly written client to accept images from
+a TCP server connection. Will be improved in
+later versions.
+'''
 def recv_all(client):
     image_data = ''
     while True:
