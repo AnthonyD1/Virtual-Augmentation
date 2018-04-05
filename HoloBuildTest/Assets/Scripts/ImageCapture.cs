@@ -37,12 +37,18 @@ public class ImageCapture : MonoBehaviour {
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame) {
         //https://answers.unity.com/questions/42843/referencing-non-static-variables-from-another-scri.html
 
-        GameObject holoLensCamera = GameObject.Find("HoloLensCamera");
+        //Convert the raw image capture into a texture (required by unity for some reason)
+        photoCaptureFrame.UploadImageDataToTexture(targetTexture);
 
-        TCPImageSend tCPImageSend = holoLensCamera.GetComponent<TCPImageSend>();
+        //Convert into jpeg data for sending over the network
+        byte[] jpegData = targetTexture.EncodeToJPG();
+
+        //Get to the HTTPImageXfer script
+        GameObject holoLensCamera = GameObject.Find("HoloLensCamera");
+        HTTPImageXfer hTTPImageXfer = holoLensCamera.GetComponent<HTTPImageXfer>();
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
-        photoCaptureFrame.UploadImageDataToTexture(tCPImageSend.texture);
+        hTTPImageXfer.Post(jpegData);
     }
 	
 	// Update is called once per frame
