@@ -15,7 +15,7 @@ public class ImageCapture : MonoBehaviour {
     private bool cameraSetupCompleted = false;
     private bool photoCaptureModeOn = false;
     private bool cameraBusy = false;
-    private bool networkBusy = true;
+    private bool networkBusy = false;
 
     private GameObject holoLensCamera;
     private HTTPImageXfer hTTPImageXfer;
@@ -132,7 +132,7 @@ public class ImageCapture : MonoBehaviour {
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Uploaded to texture");
 
         //Convert into jpeg data for sending over the network
-        byte[] jpegData = targetTexture.EncodeToJPG();
+        byte[] jpegData = ImageConversion.EncodeToJPG(targetTexture);
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + jpegData.ToString());
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
