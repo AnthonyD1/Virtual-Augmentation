@@ -8,26 +8,26 @@ public class HTTPImageXfer : MonoBehaviour {
     public string serverPath;
 
     void PostText(string textData) {
-        Debug.Log("PostText function called");
+        Debug.Log("HTTPImageXfer.PostText: PostText function called");
 
         UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, textData);
-        Debug.Log("UnityWebRequest created");
+        Debug.Log("HTTPImageXfer.PostText: UnityWebRequest created");
 
         www.SendWebRequest();
-        Debug.Log("Send web request completed");
+        Debug.Log("HTTPImageXfer.PostText: Send web request completed");
 
         if (www.isNetworkError || www.isHttpError) {
-            Debug.Log("www-error: " + www.error);
+            Debug.Log("HTTPImageXfer.PostText: www-error: " + www.error);
         } else {
-            Debug.Log("POST completed");
+            Debug.Log("HTTPImageXfer.PostText: POST completed");
         }
     }
 
     // Use this for initialization
     void Start () {
-        Debug.Log("HTTPImageXfer Started");
+        Debug.Log("HTTPImageXfer.Start: HTTPImageXfer Started");
         PostText("Microsoft sucks");
-        Debug.Log("Post text function completed");
+        Debug.Log("HTTPImageXfer.Start: Post text function completed");
 	}
 	
 	// Update is called once per frame
@@ -36,22 +36,20 @@ public class HTTPImageXfer : MonoBehaviour {
 	}
 
     public void PostJpeg(byte[] jpegData) {
-        Debug.Log("PostJpeg called");
+        Debug.Log("HTTPImageXfer.PostJpeg: PostJpeg called");
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
         formData.Add(new MultipartFormDataSection("file", jpegData));
-        Debug.Log("PostJpeg: FormData object created successfully");
+        Debug.Log("HTTPImageXfer.PostJpeg: FormData object created successfully");
 
         UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, formData);
         www.SendWebRequest();
-        Debug.Log("PostJpeg: UnityWebRequest completed");
+        Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest completed");
 
         if (www.isNetworkError || www.isHttpError) {
-            Debug.Log("PostJpeg: www-error: " + www.error);
+            Debug.Log("HTTPImageXfer.PostJpeg: www-error: " + www.error);
         } else {
-            Debug.Log("PostJpeg: Form upload complete!");
+            Debug.Log("HTTPImageXfer.PostJpeg: Form upload complete!");
         }
-    }
-
-    
+    } 
 }

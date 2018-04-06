@@ -23,7 +23,7 @@ public class ImageCapture : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("Photo capture script started");
+        Debug.Log("ImageCapture.Start: Photo capture script started");
 
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
         Debug.Log("ImageCapture.Start: Resolution set: " + cameraResolution.ToString());
@@ -62,10 +62,10 @@ public class ImageCapture : MonoBehaviour {
 
     void CameraSetup(PhotoCapture captureObject) {
         photoCaptureObject = captureObject;
-        Debug.Log("CameraSetup: photoCaptureObject defined");
+        Debug.Log("ImageCapture.CameraSetup: photoCaptureObject defined");
 
         cameraParameters = new CameraParameters();
-        Debug.Log("CameraSetup: cameraParameters set up correctly");
+        Debug.Log("ImageCapture.CameraSetup: cameraParameters set up correctly");
 
         cameraParameters.hologramOpacity = 0.0f;
         Debug.Log("ImageCapture.CameraSetup: hologramOpacity set");
