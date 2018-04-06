@@ -15,7 +15,11 @@ public class ImageCapture : MonoBehaviour {
     private Resolution cameraResolution;
     private CameraParameters cameraParameters;
 
+    private bool photoCaptureObjectCreated = false;
+    private bool cameraSetupCompleted = false;
     private bool photoCaptureModeOn = false;
+    private bool cameraBusy = false;
+    private bool networkBusy = true;
 
 	// Use this for initialization
 	void Start () {
@@ -26,8 +30,6 @@ public class ImageCapture : MonoBehaviour {
 
         targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height);
         Debug.Log("ImageCapture.Start: targetTexture created");
-
-        photoCaptureObject = new PhotoCapture();
 
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject) {
             Debug.Log("ImageCapture.Start: PhotoCapture.CreateAsync started");
@@ -47,23 +49,15 @@ public class ImageCapture : MonoBehaviour {
 
             cameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
             Debug.Log("ImageCapture.Start: camera pixel format set. Async camera setup complete.");
+
+            photoCaptureObjectCreated = true;
         });
         
-        // Try the above without an inline async method
-        //PhotoCapture.CreateAsync(false, CameraSetup);
+        PhotoCapture.CreateAsync(false, CameraSetup);
         //CameraSetup(photoCaptureObject);
+        Debug.Log("ImageCapture.Start: Camera setup async started");
 
-        //Debug.Log("ImageCapture.Start: Camera setup async started");
-
-        Debug.Log("Photo capture script Start() completed");
-
-        Application.Quit();
-
-        while (!photoCaptureModeOn) {
-            Debug.Log("ImageCapture.Start: Waiting for photo capture mode to be on...");
-        }
-
-        Capture();
+        Debug.Log("ImageCapture.Start: Start() completed");
     }
 
     void CameraSetup(PhotoCapture captureObject) {
@@ -86,6 +80,8 @@ public class ImageCapture : MonoBehaviour {
         Debug.Log("ImageCapture.CameraSetup: StartPhotoMode async started");
 
         Debug.Log("ImageCapture.CameraSetup: Async camera setup completed");
+
+        cameraSetupCompleted = true;
     }
 
     void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result) {
@@ -94,17 +90,39 @@ public class ImageCapture : MonoBehaviour {
     }
 
     void Capture() {
-        if (photoCaptureModeOn) {
+        //TODO: Theoretically we can start another capture while the network is still busy from a previous capture
+        if (photoCaptureObjectCreated && cameraSetupCompleted && photoCaptureModeOn && !cameraBusy && !networkBusy) {
             photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
-            Debug.Log("Photo capture async job started");
-            photoCaptureModeOn = false;
+            Debug.Log("ImageCapture.Capture: Ready to capture; async capture job started");
+            cameraBusy = true;
         } else {
-            Debug.Log("Photo not captured because photo capture mode is not on");
+            if (!photoCaptureObjectCreated) {
+                Debug.Log("ImageCapture.Capture: Could not start capture because photoCaptureObject is not ready");
+            }
+            if (!cameraSetupCompleted) {
+                Debug.Log("ImageCapture.Capture: Could not start capture because CameraSetup is not complete");
+            }
+            if (!photoCaptureModeOn) {
+                Debug.Log("ImageCapture.Capture: Could not start capture because photo capture mode is not on");
+            }
+            if (cameraBusy) {
+                Debug.Log("ImageCapture.Capture: Could not start capture because the camera is still capturing from a previous call (cameraBusy)");
+            }
+            //TODO: Possibly remove networkBusy; see above
+            if (networkBusy) {
+                Debug.Log("ImageCapture.Capture: Could not start capture because the network is still busy from a previous call (networkBusy)");
+            }
         }
     }
 
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame) {
         //https://answers.unity.com/questions/42843/referencing-non-static-variables-from-another-scri.html
+
+        //Notify other functions that we are done with the camera
+        cameraBusy = false;
+
+        //Notify other functions that we are making a network request
+        networkBusy = true;
 
         //Convert the raw image capture into a texture (required by unity for some reason)
         photoCaptureFrame.UploadImageDataToTexture(targetTexture);
@@ -120,13 +138,18 @@ public class ImageCapture : MonoBehaviour {
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         hTTPImageXfer.PostJpeg(jpegData);
 
-        photoCaptureModeOn = true;
+        //Notify other functions that we are done with the network
+        networkBusy = false;
     }
-	
-	// Update is called once per frame
+
+
+    //TODO: Change this to use WaitForSeconds from the unity API once we're sure this works
+    private int frameCount = 0;
+    
 	void Update () {
-        //May want to make it not do it every single frame
-        //Don't caputre every frame, just for now
-        //Capture();
+        if (frameCount >= 150) {
+            frameCount = 0;
+            Capture();
+        }
 	}
 }
