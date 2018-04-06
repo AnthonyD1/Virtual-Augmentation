@@ -57,7 +57,6 @@ public class ImageCapture : MonoBehaviour {
         });
         
         PhotoCapture.CreateAsync(false, CameraSetup);
-        //CameraSetup(photoCaptureObject);
         Debug.Log("ImageCapture.Start: Camera setup async started");
 
         //Get the HTTPImageXfer object ready
