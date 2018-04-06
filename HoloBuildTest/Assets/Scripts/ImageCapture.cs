@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 //Required for capturing images
 using System.Linq;
 using UnityEngine.XR.WSA.WebCam;
-
-using System.Threading;
 
 public class ImageCapture : MonoBehaviour {
     PhotoCapture photoCaptureObject = null;
