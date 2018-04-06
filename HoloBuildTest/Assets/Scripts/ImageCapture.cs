@@ -126,6 +126,7 @@ public class ImageCapture : MonoBehaviour {
 
         //Convert the raw image capture into a texture (required by unity for some reason)
         photoCaptureFrame.UploadImageDataToTexture(targetTexture);
+        Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Uploaded to texture");
 
         //Convert into jpeg data for sending over the network
         byte[] jpegData = targetTexture.EncodeToJPG();
@@ -134,9 +135,11 @@ public class ImageCapture : MonoBehaviour {
         //Get to the HTTPImageXfer script
         GameObject holoLensCamera = GameObject.Find("HoloLensCamera");
         HTTPImageXfer hTTPImageXfer = holoLensCamera.GetComponent<HTTPImageXfer>();
+        Debug.Log("ImageCapture.OnCapturedPhotoToMemory: HTTPImageXfer object created");
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         hTTPImageXfer.PostJpeg(jpegData);
+        Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Called HTTPImageXfer");
 
         //Notify other functions that we are done with the network
         networkBusy = false;
@@ -149,6 +152,7 @@ public class ImageCapture : MonoBehaviour {
 	void Update () {
         if (frameCount >= 150) {
             frameCount = 0;
+            Debug.Log("ImageCapture.Update: Attempting to capture...");
             Capture();
         }
 	}
