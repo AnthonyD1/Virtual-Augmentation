@@ -43,23 +43,36 @@ public:
   }
 };
 
-void pictureDetect(VideoCapture & cap, People &people, char *path){
+int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   cap.open(path);
-  Mat image;
   Mat tmp;
   if(!cap.isOpened()){
     cout << "Couldn't open image..." << endl;
     exit(0);
   }
-  cap >> image;
-  cvtColor(image, tmp, CV_BGR2GRAY);
-  equalizeHist(tmp,tmp);
-  vector<Rect> fheads = people.detectHead(tmp);
-  cout << "Head count: " << people.headCount(fheads) << endl;
-  people.drawHeads(image, fheads);
-  imshow("Feed", image);
-  waitKey(1);
-  cin.get();
+  cap >> tmp;
+  vector<Rect> fheads;
+  if(show == 1){
+    Mat img;
+    cvtColor(tmp, img, CV_BGR2GRAY);
+    equalizeHist(img, img);
+    fheads = people.detectHead(img);
+    people.drawHeads(tmp, fheads);
+    imshow("Feed", tmp);
+    waitKey(1);
+    cin.get();
+  }else{
+    cvtColor(tmp, tmp, CV_BGR2GRAY);
+    equalizeHist(tmp, tmp);
+    fheads = people.detectHead(tmp);
+  }
+  for(int i = 0; i < fheads.size(); ++i){
+    cout << fheads[i].tl() << ", " << fheads[i].br() << endl;
+  }
+  //cout << "Head count: " << people.headCount(fheads) << endl;
+  int numHeads = people.headCount(fheads);
+  //people.drawHeads(image, fheads);
+  return numHeads;
 }
 
 void cameraDetect(VideoCapture & cap, People &people){
@@ -76,7 +89,7 @@ void cameraDetect(VideoCapture & cap, People &people){
     cvtColor(img, tmp, CV_BGR2GRAY);
     //ied equalized and grayscaled image.
     vector<Rect> fheads = people.detectHead(tmp);
-    cout << "Head count: " << people.headCount(fheads) << endl;
+
     //Draw the found faces on the original image, if any.
     people.drawHeads(img,fheads);
     //Display the colored image with the drawn faces.
@@ -88,9 +101,27 @@ void cameraDetect(VideoCapture & cap, People &people){
     }
   }
 }
-int main(){
+
+void usage(){
+  cout << "./detect <picture to detect faces on> <'true' to show frame, 'false' to just use console>" << endl;
+}
+
+int main(int argc, char** argv){
   VideoCapture cap;
   People people;
-  cameraDetect(cap, people);
+  int param;
+  switch(argc){
+    case 2:
+      param = 0;
+      break;
+    case 3:
+      param = atoi(argv[2]);
+      break;
+    default:
+      usage();
+      return -1;
+  }
+  int out = pictureDetect(cap, people, argv[1], param);
+  cout << out << " people..." << endl;
   return 0;
 }

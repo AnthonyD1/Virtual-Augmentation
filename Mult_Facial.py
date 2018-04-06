@@ -12,9 +12,9 @@ def load_face_images():
         dic_obj = pickle.load(stuff)
     return dic_obj
 
-#faces = load_face_images()
-encodings = []
-names = []
+faces = load_face_images()
+encodings = faces.values()
+names = faces.keys()
 
 def draw_locations(frame, locations, names):
     for (top,right,bottom,left), name in zip(locations, names):
@@ -28,8 +28,9 @@ def draw_locations(frame, locations, names):
     return frame
 
 def comparison(emult):
-    match = 'DooD'
-    vals = fr.compare_faces(encodings, emult, tolerance=0.55)
+    match = None
+    print(len(encodings))
+    vals = fr.compare_faces(encodings, emult)
     if True in vals:
         match = names[vals.index(True)]
     return match
@@ -47,7 +48,6 @@ def image_resize(image):
     return rframe
 
 def detect(rframe):
-    #rframe = image_resize(image)
     loc = fr.face_locations(rframe)
     names = recognize_faces(rframe, loc)
     s_queue.put(names)
@@ -85,13 +85,12 @@ def main_thread(cam):
         print(nframe)
         pool.map(detect_GUI, [nframe])
 
+if __name__ == '__main__':
 
-s_queue = mp.Queue()
-pool = mp.Pool(processes=4)
-#fin = picture_names('../victims/Angela.jpeg')
-#print(fin)
-#pool2 = mp.Pool(processes=2)
-#pool.map
-#pool2 = mp.Pool(processes=3)
-video = cv.VideoCapture(0)
-main_thread(video)
+    s_queue = mp.Queue()
+    pool = mp.Pool(processes=4)
+    video = cv.VideoCapture(0)
+    while True:
+        getgud = str(input('Name of picture: '))
+        print(getgud)
+        print(picture_names(getgud))
