@@ -21,8 +21,11 @@ public class ImageCapture : MonoBehaviour {
     private bool cameraBusy = false;
     private bool networkBusy = true;
 
-	// Use this for initialization
-	void Start () {
+    private GameObject holoLensCamera;
+    private HTTPImageXfer hTTPImageXfer;
+
+    // Use this for initialization
+    void Start () {
         Debug.Log("ImageCapture.Start: Photo capture script started");
 
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
@@ -56,6 +59,11 @@ public class ImageCapture : MonoBehaviour {
         PhotoCapture.CreateAsync(false, CameraSetup);
         //CameraSetup(photoCaptureObject);
         Debug.Log("ImageCapture.Start: Camera setup async started");
+
+        //Get the HTTPImageXfer object ready
+        holoLensCamera = GameObject.Find("HoloLensCamera");
+        hTTPImageXfer = holoLensCamera.GetComponent<HTTPImageXfer>();
+        Debug.Log("ImageCapture.Start: HTTPImageXfer object created");
 
         Debug.Log("ImageCapture.Start: Start() completed");
     }
@@ -131,11 +139,6 @@ public class ImageCapture : MonoBehaviour {
         //Convert into jpeg data for sending over the network
         byte[] jpegData = targetTexture.EncodeToJPG();
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + jpegData.ToString());
-
-        //Get to the HTTPImageXfer script
-        GameObject holoLensCamera = GameObject.Find("HoloLensCamera");
-        HTTPImageXfer hTTPImageXfer = holoLensCamera.GetComponent<HTTPImageXfer>();
-        Debug.Log("ImageCapture.OnCapturedPhotoToMemory: HTTPImageXfer object created");
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         hTTPImageXfer.PostJpeg(jpegData);
