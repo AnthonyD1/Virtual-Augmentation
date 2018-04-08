@@ -20,6 +20,10 @@ public class ImageCapture : MonoBehaviour {
     private GameObject holoLensCamera;
     private HTTPImageXfer hTTPImageXfer;
 
+    //Required for networking
+    public string serverAddress;
+    public string serverPath;
+
     // Use this for initialization
     void Start () {
         Debug.Log("ImageCapture.Start: Photo capture script started");
@@ -137,9 +141,10 @@ public class ImageCapture : MonoBehaviour {
         //Convert into jpeg data for sending over the network
         byte[] jpegData = ImageConversion.EncodeToJPG(targetTexture);
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + System.Convert.ToBase64String(jpegData));
-        
+
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         hTTPImageXfer.PostJpeg(jpegData);
+        //PostJpeg(jpegData);
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Called HTTPImageXfer");
 
         //Notify other functions that we are done with the network
