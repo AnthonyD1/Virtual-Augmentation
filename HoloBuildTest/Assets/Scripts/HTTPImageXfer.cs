@@ -36,11 +36,11 @@ public class HTTPImageXfer : MonoBehaviour {
         Debug.Log("HTTPImageXfer.PostJpeg: PostJpeg called");
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        formData.Add(new MultipartFormDataSection("file", jpegData));
+        //formData.Add(new MultipartFormDataSection("file", jpegData));
         Debug.Log("HTTPImageXfer.PostJpeg: FormData object created successfully");
 
         //UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, formData);
-        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, System.Convert.ToBase64String(jpegData));
+        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, "FILE:" + System.Convert.ToBase64String(jpegData));
         Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest created");
 
         /*yield return*/ www.SendWebRequest();
