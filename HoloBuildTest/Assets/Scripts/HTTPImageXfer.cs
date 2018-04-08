@@ -34,7 +34,6 @@ public class HTTPImageXfer : MonoBehaviour {
         PostText("Microsoft sucks");
         PostText("Anthony is smart");
         PostText("Third");
-        PutText("This with put");
         Debug.Log("HTTPImageXfer.Start: Post text function completed");
 	}
 	
@@ -45,17 +44,19 @@ public class HTTPImageXfer : MonoBehaviour {
 
     public IEnumerator PostJpeg(byte[] jpegData) {
         Debug.Log("HTTPImageXfer.PostJpeg: PostJpeg called");
-        //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        //formData.Add(new MultipartFormDataSection("file", jpegData));
-        //Debug.Log("HTTPImageXfer.PostJpeg: FormData object created successfully");
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
+        formData.Add(new MultipartFormDataSection("file", jpegData));
+        Debug.Log("HTTPImageXfer.PostJpeg: FormData object created successfully");
 
-        UnityWebRequest www = UnityWebRequest.Put("http://" + serverAddress + serverPath, jpegData);
+        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, formData);
         yield return www.SendWebRequest();
         Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest completed");
 
-        if (www.isNetworkError || www.isHttpError) {
-            Debug.Log("HTTPImageXfer.PostJpeg: www-error: " + www.error + ". Status code is " + www.responseCode);
+        if (www.isNetworkError) {
+            Debug.Log("HTTPImageXfer.PostJpeg: Network error: " + www.error);
+        } else if(www.isHttpError) {
+            Debug.Log("HTTPImageXfer.PostJpeg: HTTP error: " + www.error + ". Status code is " + www.responseCode);
         } else {
             Debug.Log("HTTPImageXfer.PostJpeg: Form upload complete!");
         }

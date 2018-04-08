@@ -27,9 +27,10 @@ public class ImageCapture : MonoBehaviour {
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
         Debug.Log("ImageCapture.Start: Resolution set: " + cameraResolution.ToString());
 
-        targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height);
+        targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height, TextureFormat.BGRA32, false);
         Debug.Log("ImageCapture.Start: targetTexture created");
 
+        /*
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject) {
             Debug.Log("ImageCapture.Start: PhotoCapture.CreateAsync started");
             photoCaptureObject = captureObject;
@@ -51,6 +52,7 @@ public class ImageCapture : MonoBehaviour {
 
             photoCaptureObjectCreated = true;
         });
+        */
         
         PhotoCapture.CreateAsync(false, CameraSetup);
         Debug.Log("ImageCapture.Start: Camera setup async started");
@@ -85,6 +87,7 @@ public class ImageCapture : MonoBehaviour {
         Debug.Log("ImageCapture.CameraSetup: Async camera setup completed");
 
         cameraSetupCompleted = true;
+        photoCaptureObjectCreated = true;
     }
 
     void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result) {
@@ -133,8 +136,8 @@ public class ImageCapture : MonoBehaviour {
 
         //Convert into jpeg data for sending over the network
         byte[] jpegData = ImageConversion.EncodeToJPG(targetTexture);
-        Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + jpegData.ToString());
-
+        Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + System.Convert.ToBase64String(jpegData));
+        
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         hTTPImageXfer.PostJpeg(jpegData);
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Called HTTPImageXfer");
