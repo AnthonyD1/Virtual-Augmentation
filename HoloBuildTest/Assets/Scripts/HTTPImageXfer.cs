@@ -23,11 +23,6 @@ public class HTTPImageXfer : MonoBehaviour {
         }
     }
 
-    void PutText(string textData) {
-        UnityWebRequest www = UnityWebRequest.Put("http://" + serverAddress + serverPath, textData);
-        www.SendWebRequest();
-    }
-
     // Use this for initialization
     void Start () {
         Debug.Log("HTTPImageXfer.Start: HTTPImageXfer Started");
@@ -35,11 +30,6 @@ public class HTTPImageXfer : MonoBehaviour {
         PostText("Anthony is smart");
         PostText("Third");
         Debug.Log("HTTPImageXfer.Start: Post text function completed");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//Nothing
 	}
 
     public IEnumerator PostJpeg(byte[] jpegData) {
