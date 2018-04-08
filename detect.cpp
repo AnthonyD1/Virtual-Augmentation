@@ -27,7 +27,7 @@ public:
         -This helps eliminate false positives.
       Fifth, use the haarcascade detection.
     **/
-    headDetector.detectMultiScale(img, temp, 1.1, 5, 1);
+    headDetector.detectMultiScale(img, temp, 1.1, 8, 1);
     return temp;
   }
   void drawHeads(Mat & frame, vector<Rect> &r){
