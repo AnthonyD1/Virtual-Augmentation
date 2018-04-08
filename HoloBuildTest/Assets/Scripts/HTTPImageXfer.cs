@@ -50,5 +50,7 @@ public class HTTPImageXfer : MonoBehaviour {
         } else {
             Debug.Log("HTTPImageXfer.PostJpeg: Form upload complete!");
         }
+
+        www.Dispose();
     } 
 }
