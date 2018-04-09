@@ -23,27 +23,13 @@ public class HTTPImageXfer : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    void Start () {
-        Debug.Log("HTTPImageXfer.Start: HTTPImageXfer Started");
-        PostText("Microsoft sucks");
-        PostText("Anthony is smart");
-        PostText("Third");
-        Debug.Log("HTTPImageXfer.Start: Post text function completed");
-	}
-
-    public /*IEnumerator*/ void PostJpeg(byte[] jpegData) {
+    public void PostJpeg(byte[] jpegData) {
         Debug.Log("HTTPImageXfer.PostJpeg: PostJpeg called");
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
-        //formData.Add(new MultipartFormDataSection("file", jpegData));
-        Debug.Log("HTTPImageXfer.PostJpeg: FormData object created successfully");
 
-        //UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, formData);
         UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, "FILE:" + System.Convert.ToBase64String(jpegData));
         Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest created");
 
-        /*yield return*/ www.SendWebRequest();
+        www.SendWebRequest();
         Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest completed");
 
         if (www.isNetworkError) {
