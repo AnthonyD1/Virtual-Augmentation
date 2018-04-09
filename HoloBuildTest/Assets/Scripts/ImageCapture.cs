@@ -1,6 +1,7 @@
 ﻿//Activate this to print gratuitous debug messages
 //#define IMAGECAPTURE_DEBUG
 
+/*
 using UnityEngine;
 
 //Required for capturing images
@@ -62,7 +63,7 @@ public class ImageCapture : MonoBehaviour {
 
             photoCaptureObjectCreated = true;
         });
-        */
+        
         
         PhotoCapture.CreateAsync(false, CameraSetup);
 #if IMAGECAPTURE_DEBUG
@@ -185,7 +186,7 @@ public class ImageCapture : MonoBehaviour {
 #endif
 
         //Convert into jpeg data for sending over the network
-        byte[] jpegData = ImageConversion.EncodeToJPG(targetTexture);
+        byte[] jpegData = ImageConversion.EncodeToJPG(targetTexture, 1);
 
 #if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + System.Convert.ToBase64String(jpegData));
@@ -222,3 +223,4 @@ public class ImageCapture : MonoBehaviour {
         }
 	}
 }
+*/
