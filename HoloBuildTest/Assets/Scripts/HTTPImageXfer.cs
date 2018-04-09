@@ -7,6 +7,12 @@ public class HTTPImageXfer : MonoBehaviour {
     public string serverAddress;
     public string serverPath;
 
+    private TextChange TextChangeObject;
+
+    private void Start() {
+        TextChangeObject = GameObject.Find("HoloLensCamera").GetComponent<TextChange>();
+    }
+
     void PostText(string textData) {
         Debug.Log("HTTPImageXfer.PostText: PostText function called");
 
@@ -15,6 +21,15 @@ public class HTTPImageXfer : MonoBehaviour {
 
         www.SendWebRequest();
         Debug.Log("HTTPImageXfer.PostText: Send web request completed");
+
+        while(!www.downloadHandler.isDone) {
+            Debug.Log("HTTPImageXfer.PostText: Waiting for response... " + www.downloadProgress);
+        }
+
+        Debug.Log("HTTPImageXfer.PostText: Web Request Response: " + www.downloadHandler.text);
+
+        //Set the HUD text to the response of the HTTP request
+        TextChangeObject.SetTextValue(www.downloadHandler.text);
 
         if (www.isNetworkError || www.isHttpError) {
             Debug.Log("HTTPImageXfer.PostText: www-error: " + www.error);
@@ -39,5 +54,5 @@ public class HTTPImageXfer : MonoBehaviour {
         } else {
             Debug.Log("HTTPImageXfer.PostJpeg: Form upload complete!");
         }
-    } 
+    }
 }

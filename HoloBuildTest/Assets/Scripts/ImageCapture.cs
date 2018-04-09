@@ -156,15 +156,15 @@ public class ImageCapture : MonoBehaviour {
     private int frameCount = 0;
     
 	void Update () {
-        /*
-        if (frameCount >= 150) {
+        
+        if (frameCount >= 300) {
             frameCount = 0;
             Debug.Log("ImageCapture.Update: Attempting to capture...");
             Capture();
         } else {
             frameCount++;
         }
-        */
+        
         Capture();
 	}
 }

@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * Helper functions to make changes to HUD text easy
+ */
 public class TextChange : MonoBehaviour {
+    public Text MyText;
 
-    public Text PeopleCountText;
-    public string textValue;
-
-	// Use this for initialization
 	void Start () {
-        PeopleCountText.text = "Hello, World!";
+        MyText.text = "Hello, World!";
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        PeopleCountText.text = textValue;
-	}
+
+    public void SetTextValue(string NewTextValue) {
+        MyText.text = NewTextValue;
+    }
 }
