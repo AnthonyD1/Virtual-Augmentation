@@ -1,90 +1,60 @@
 import face_recognition as face
 from multiprocessing import Process, Queue, Pool, Manager
-from time import sleep
 import cv2 as cv
-import itertools
-import pickle
+import os
+from functools import partial
+import _pickle as pickle
 
-def load_face_images():
+def create_faces(path, pname):
+    new_dict = {}
+    for fil in os.listdir(path):
+        jod = os.path.join(path, fil)
+        #print(jod)
+        if os.path.isfile(jod) and ('.jpeg' in fil or '.jpg' in fil):
+            #print
+            try:
+                name = fil[:fil.index('.')]
+                img = face.load_image_file(jod)
+                enc = face.face_encodings(img)[0]
+                new_dict[name] = enc
+                print('Processed: '+ jod)
+            except:
+                print('Exception while processing image, passing '+jod+'...')
+    if new_dict:
+        try:
+            with open(pname+'.txt','wb') as f:
+                pickle.dump(new_dict, f)
+            print('Successfully dumped face encodings!')
+        except:
+            print('Error dumping facial encodings!')
+
+def load_faces(path):
     dic_obj = {}
-    with open('Backup.txt') as stuff:
+    with open(path, 'rb') as stuff:
         dic_obj = pickle.load(stuff)
     return dic_obj
 
-faces = load_face_images()
-encodings = faces.values()
-names = faces.keys()
-
-def detect_faces(image):
-    loc = face.face_locations(image)
-
-def recognize_faces(enc):
-    match = None
-    #print('Multiprocess Started!')
-    vals = face.compare_faces(encodings, enc, tolerance=0.55)
+def compare_encodings(encodings, names, enc):
+    match = 'Unknown'
+    vals = face.compare_faces(encodings, enc, tolerance=0.54)
     if True in vals:
         match = names[vals.index(True)]
-    print('Name: '+str(match))
-    #qseen.append(match)
-    #qseen += 1
+    return match
 
-def get_encodings(image):
-    return pool.map(face.face_encodings, [image])
+def multiprocess_comparison(e, n,ne):
+    p = Pool(4)
+    args = partial(compare_encodings,e,n)
+    retval = p.map(args, ne)
+    p.close()
+    return retval
 
-def detect_people(image):
-    found, _ = hog.detectMultiScale(image,  winStride=(8,8), padding=(32,32), scale=1.05)
-    return found
-
-def draw_detections( img, rects, thickness = 1):
-    #print rects
-    for x, y, w, h in rects:
-        # the HOG detector returns slightly larger rectangles than the real objects.
-        # so we slightly shrink the rectangles to get a nicer output.
-        pad_w, pad_h = int(0.15*w), int(0.05*h)
-        cv.rectangle(img, (x+pad_w, y+pad_h), (x+w-pad_w, y+h-pad_h), (0, 255, 0), thickness)
-
-def resize_frame(f, foo):
-    return f[:,:,::-1]
-
-def sight():
-    pframe = False
-
-    while True:
-        ret, frame  = video.read()
-        if pframe:
-
-            sframe = cv.resize(frame, (0,0), fx=.25, fy=.25)
-        #mframe = cv.resize(frame, (0,0),fx=.5, fy=.5)
-            pool.map(resize_frame, [frame])
-
-            #Process(target=detect_faces, args=(rframe,)).start()
-
-            sdf = get_encodings(retframe)
-            retframe = None
-        #q = Queue()
-            print '\nFaces:'
-            print '-'*50
-            if sdf:
-                #pool.map(recognize_faces, sdf)
-                print(sdf)
-        '''for (top,right,bottom,left) in locations:
-                top *=4
-                right *= 4
-                bottom *= 4
-                left *= 4
-                    cv.rectangle(frame, (left, top), (right,bottom), (0,0,255),2)
-                font = cv.FONT_HERSHEY_DUPLEX
-                cv.putText(frame, "PERSON", (left+6,bottom-6),font,1.0,(255,255,255),1)'''
-        pframe = not pframe
-        cv.imshow('Wut', frame)
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-
-
-pool = Pool(3)
-video = cv.VideoCapture(0)
-hog = cv.HOGDescriptor()
-hog.setSVMDetector(cv.HOGDescriptor_getDefaultPeopleDetector())
-locs = None
-
-sight()
+dick = load_faces('all_faces.txt')
+while True:
+    try:
+        img = face.load_image_file('process.jpg')
+        enc = face.face_encodings(img)
+        val = multiprocess_comparison(list(dick.values()), list(dick.keys()), enc)
+        print(val)
+        os.remove('process.jpg')
+    except:
+        pass
