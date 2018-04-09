@@ -6,8 +6,8 @@ public class HTTPImageXfer : MonoBehaviour {
     public string serverPath;
 
     private TextChange TextChangeObject;
-
     private UnityWebRequest unityWebRequestObject;
+    private int frameCount = 0;
 
     private void Start() {
         TextChangeObject = GameObject.Find("HoloLensCamera").GetComponent<TextChange>();
@@ -16,6 +16,12 @@ public class HTTPImageXfer : MonoBehaviour {
     }
 
     private void Update() {
+        if(frameCount >= 150) {
+            GetRequest();
+            frameCount = 0;
+        }
+        frameCount++;
+
         if(unityWebRequestObject.downloadHandler.isDone) {
             GetCallback();
         }
