@@ -1,5 +1,6 @@
 ﻿#define ENABLE_POST_JPEG
 //#define ENABLE_GET_TEST
+#define HTTPIMAGEXFER_DEBUG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -17,11 +18,13 @@ public class HTTPImageXfer : MonoBehaviour {
 #endif
 #if ENABLE_POST_JPEG
     private UnityWebRequest postJpegUnityWebRequestObject;
+    private bool postJpegUnityWebRequestObjectIsActive = false;
 #endif
 
     private void Start() {
         TextChangeObject = GameObject.Find("HoloLensCamera").GetComponent<TextChange>();
 #if ENABLE_GET_TEST
+        getTestUnityWebRequestObject = UnityWebRequest.Get("http://icanhazip.com");
         GetTest();
 #endif
     }
@@ -34,7 +37,7 @@ public class HTTPImageXfer : MonoBehaviour {
 #endif
 
 #if ENABLE_POST_JPEG
-        if(postJpegUnityWebRequestObject.downloadHandler.isDone) {
+        if(postJpegUnityWebRequestObjectIsActive && postJpegUnityWebRequestObject.downloadHandler.isDone) {
             PostJpegCallback();
         }
 #endif
@@ -42,7 +45,6 @@ public class HTTPImageXfer : MonoBehaviour {
 
 #if ENABLE_GET_TEST
     void GetTest() {
-        getTestUnityWebRequestObject = UnityWebRequest.Get("http://icanhazip.com");
         getTestUnityWebRequestObject.SendWebRequest();
     }
 
@@ -53,10 +55,15 @@ public class HTTPImageXfer : MonoBehaviour {
 #endif
 
     void PostText(string textData) {
+#if HTTPIMAGEXFER_DEBUG
         Debug.Log("HTTPImageXfer.PostText: PostText function called");
+#endif
 
         UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, textData);
+
+#if HTTPIMAGEXFER_DEBUG
         Debug.Log("HTTPImageXfer.PostText: UnityWebRequest created");
+#endif
 
         //Set the HUD text to the response of the HTTP request
         TextChangeObject.SetTextValue(www.downloadHandler.text);
@@ -72,30 +79,21 @@ public class HTTPImageXfer : MonoBehaviour {
     public void PostJpeg(byte[] jpegData) {
         Debug.Log("HTTPImageXfer.PostJpeg: PostJpeg called");
 
-        UnityWebRequest www = UnityWebRequest.Post("http://" + serverAddress + serverPath, "FILE:" + System.Convert.ToBase64String(jpegData));
+        postJpegUnityWebRequestObject = UnityWebRequest.Post("http://" + serverAddress + serverPath, "FILE:" + System.Convert.ToBase64String(jpegData));
         Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest created");
 
-        www.SendWebRequest();
+        postJpegUnityWebRequestObjectIsActive = true;
+
+        postJpegUnityWebRequestObject.SendWebRequest();
         Debug.Log("HTTPImageXfer.PostJpeg: UnityWebRequest completed");
-
-        while (!www.downloadHandler.isDone) {
-            Debug.Log("HTTPImageXfer.PostText: Waiting for response... " + www.downloadProgress);
-        }
-
-        Debug.Log("HTTPImageXfer.PostText: Web Request Response: " + www.downloadHandler.data.ToString());
-
-        if (www.isNetworkError) {
-            Debug.Log("HTTPImageXfer.PostJpeg: Network error: " + www.error);
-        } else if(www.isHttpError) {
-            Debug.Log("HTTPImageXfer.PostJpeg: HTTP error: " + www.error + ". Status code is " + www.responseCode);
-        } else {
-            Debug.Log("HTTPImageXfer.PostJpeg: Form upload complete!");
-        }
     }
 
     void PostJpegCallback() {
         TextChangeObject.SetTextValue(postJpegUnityWebRequestObject.downloadHandler.text);
-        Debug.Log("HTTPImageXfer.GetTestCallback: Got content of " + postJpegUnityWebRequestObject.downloadHandler.text);
+        Debug.Log("HTTPImageXfer.PostJpegCallback: Got content of " + postJpegUnityWebRequestObject.downloadHandler.text);
+
+        postJpegUnityWebRequestObjectIsActive = false;
+        postJpegUnityWebRequestObject.Dispose();
     }
 #else
     public void PostJpeg(byte[] jpegData) {
