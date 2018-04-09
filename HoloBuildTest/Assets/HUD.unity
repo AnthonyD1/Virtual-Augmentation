@@ -968,7 +968,6 @@ GameObject:
   - component: {fileID: 2121571820}
   - component: {fileID: 2121571818}
   - component: {fileID: 2121571815}
-  - component: {fileID: 2121571817}
   - component: {fileID: 2121571816}
   m_Layer: 0
   m_Name: HoloLensCamera
@@ -1000,19 +999,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433bab2d6e53cab469dab14960b46313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverAddress: 10.200.1.183:8080
-  serverPath: /
---- !u!114 &2121571817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2121571814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ccbafb6dd135664289b3700142bf7a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serverAddress: 10.201.4.245:8080
+  serverPath: /upload
 --- !u!114 &2121571818
 MonoBehaviour:
   m_ObjectHideFlags: 0
