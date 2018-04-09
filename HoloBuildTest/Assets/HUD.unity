@@ -988,8 +988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5873c074a1ca57443b159fa2bd27c9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PeopleCountText: {fileID: 1285560163}
-  textValue: Text value set from unity@!!
+  MyText: {fileID: 1285560163}
 --- !u!114 &2121571816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,8 +1013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ccbafb6dd135664289b3700142bf7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverAddress: 
-  serverPath: 
 --- !u!114 &2121571818
 MonoBehaviour:
   m_ObjectHideFlags: 0

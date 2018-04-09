@@ -21,6 +21,7 @@ public class HTTPImageXfer : MonoBehaviour {
 
         www.SendWebRequest();
         Debug.Log("HTTPImageXfer.PostText: Send web request completed");
+        Debug.Log("New version");
 
         while(!www.downloadHandler.isDone) {
             Debug.Log("HTTPImageXfer.PostText: Waiting for response... " + www.downloadProgress);

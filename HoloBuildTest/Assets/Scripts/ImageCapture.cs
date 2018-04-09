@@ -20,10 +20,6 @@ public class ImageCapture : MonoBehaviour {
     private GameObject holoLensCamera;
     private HTTPImageXfer hTTPImageXfer;
 
-    //Required for networking
-    public string serverAddress;
-    public string serverPath;
-
     // Use this for initialization
     void Start () {
         Debug.Log("ImageCapture.Start: Photo capture script started");
