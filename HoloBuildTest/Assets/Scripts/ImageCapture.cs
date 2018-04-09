@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//Activate this to print gratuitous debug messages
+//#define IMAGECAPTURE_DEBUG
+
+using UnityEngine;
 
 //Required for capturing images
 using System.Linq;
@@ -22,13 +25,20 @@ public class ImageCapture : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.Start: Photo capture script started");
+#endif
 
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.Start: Resolution set: " + cameraResolution.ToString());
+#endif
 
         targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height, TextureFormat.BGRA32, false);
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.Start: targetTexture created");
+#endif
 
         /*
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject) {
@@ -55,36 +65,63 @@ public class ImageCapture : MonoBehaviour {
         */
         
         PhotoCapture.CreateAsync(false, CameraSetup);
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.Start: Camera setup async started");
+#endif
 
         //Get the HTTPImageXfer object ready
         holoLensCamera = GameObject.Find("HoloLensCamera");
         hTTPImageXfer = holoLensCamera.GetComponent<HTTPImageXfer>();
+        
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.Start: HTTPImageXfer object created");
-
         Debug.Log("ImageCapture.Start: Start() completed");
+#endif
     }
 
     void CameraSetup(PhotoCapture captureObject) {
         photoCaptureObject = captureObject;
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.CameraSetup: photoCaptureObject defined");
+#endif
 
         cameraParameters = new CameraParameters();
+        
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.CameraSetup: cameraParameters set up correctly");
+#endif
 
         cameraParameters.hologramOpacity = 0.0f;
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.CameraSetup: hologramOpacity set");
+#endif
+
         cameraParameters.cameraResolutionWidth = cameraResolution.width;
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.CameraSetup: Camera resolution (width) set");
+#endif
+
         cameraParameters.cameraResolutionHeight = cameraResolution.height;
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.CameraSetup: Camera resolution (height) set");
+#endif
+
         cameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.CameraSetup: pixelFormat set");
+#endif
 
         photoCaptureObject.StartPhotoModeAsync(cameraParameters, OnPhotoModeStarted);
-        Debug.Log("ImageCapture.CameraSetup: StartPhotoMode async started");
 
+#if IMAGECAPTURE_DEBUG
+        Debug.Log("ImageCapture.CameraSetup: StartPhotoMode async started");
         Debug.Log("ImageCapture.CameraSetup: Async camera setup completed");
+#endif
 
         cameraSetupCompleted = true;
         photoCaptureObjectCreated = true;
@@ -92,16 +129,25 @@ public class ImageCapture : MonoBehaviour {
 
     void OnPhotoModeStarted(PhotoCapture.PhotoCaptureResult result) {
         photoCaptureModeOn = true;
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.OnPhotoModeStarted: Photo capture mode is on");
+#endif
     }
 
     void Capture() {
         //TODO: Theoretically we can start another capture while the network is still busy from a previous capture
         if (photoCaptureObjectCreated && cameraSetupCompleted && photoCaptureModeOn && !cameraBusy && !networkBusy) {
             photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
+
+#if IMAGECAPTURE_DEBUG
             Debug.Log("ImageCapture.Capture: Ready to capture; async capture job started");
+#endif
+
             cameraBusy = true;
-        } else {
+        }
+#if IMAGECAPTURE_DEBUG
+        else {
             if (!photoCaptureObjectCreated) {
                 Debug.Log("ImageCapture.Capture: Could not start capture because photoCaptureObject is not ready");
             }
@@ -119,6 +165,7 @@ public class ImageCapture : MonoBehaviour {
                 Debug.Log("ImageCapture.Capture: Could not start capture because the network is still busy from a previous call (networkBusy)");
             }
         }
+#endif
     }
 
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame) {
@@ -132,16 +179,25 @@ public class ImageCapture : MonoBehaviour {
 
         //Convert the raw image capture into a texture (required by unity for some reason)
         photoCaptureFrame.UploadImageDataToTexture(targetTexture);
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Uploaded to texture");
+#endif
 
         //Convert into jpeg data for sending over the network
         byte[] jpegData = ImageConversion.EncodeToJPG(targetTexture);
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: jpeg data is " + System.Convert.ToBase64String(jpegData));
+#endif
 
         //Send the captured image as a Texture2D over to the TCPImageSend script for processing
         hTTPImageXfer.PostJpeg(jpegData);
         //PostJpeg(jpegData);
+
+#if IMAGECAPTURE_DEBUG
         Debug.Log("ImageCapture.OnCapturedPhotoToMemory: Called HTTPImageXfer");
+#endif
 
         //Notify other functions that we are done with the network
         networkBusy = false;
@@ -155,12 +211,14 @@ public class ImageCapture : MonoBehaviour {
         
         if (frameCount >= 300) {
             frameCount = 0;
+
+#if IMAGECAPTURE_DEBUG
             Debug.Log("ImageCapture.Update: Attempting to capture...");
+#endif
+
             Capture();
         } else {
             frameCount++;
         }
-        
-        Capture();
 	}
 }
