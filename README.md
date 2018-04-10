@@ -17,7 +17,7 @@ $ g++ detect.cpp -o detect.cpp `pkg-config --cflags --libs opencv` -fopenmp -lpt
 ```
 ### Running
 ```bash
-$ ./detect --helpo
+$ ./detect --help
 ```
 
 ## Building for the HoloLens
