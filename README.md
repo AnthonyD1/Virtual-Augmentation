@@ -2,12 +2,23 @@
 A project about facial recognition, real-time heads-up-displays, and social media cross referencing.
 
 ## Index
-- [Poster](#Project Poster)
-- [Building](#Building)
+- [Poster](#poster)
+- [Code Compiling](#compilation)
+- [Building](#building)
 
-## Project Poster
+## Poster
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
+
+## Compiling & Running detect.cpp 
+### Compilation
+```bash
+$ g++ detect.cpp -o detect.cpp `pkg-config --cflags --libs opencv` -fopenmp -lpthread
+```
+### Running
+```bash
+$ ./detect --help
+```
 
 ## Building
 ### Build Requirements
@@ -32,7 +43,7 @@ A project about facial recognition, real-time heads-up-displays, and social medi
     - The emulator uses Hyper-V and Hyper-V has some weird requirements. It does not work on all CPUs that support virtualization
     - I had trouble because my CPU supported virtualization but not SLAT
     - See https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/reference/hyper-v-requirements
-###Build Procedure
+### Build Procedure
 1. Install everything listed above
 1. Clone this repo
 1. Open the HoloBuildTest directory as a project in Unity Editor
@@ -52,7 +63,7 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 1. Click the run button
 1. Visual studio will build the project and then fail. Click the run button again and it will successfully deploy to the HoloLens or emulator (yeah idk)
 
-###Building to the real HoloLens
+### Building to the real HoloLens
 To build for the real HoloLens, you need to put it into Developer Mode. On the HoloLens:
 1. Start → Settings → Update & Security → For developers
 1. Turn Developer mode on
