@@ -3,6 +3,7 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 
 ## Index
 - [Poster](#poster)
+- [HUD](#hud)
 - [Code Compiling](#compilation)
 - [Building](#building)
 - [Resources](#resources)
@@ -10,6 +11,10 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 ## Poster
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
+
+## HUD
+Here is an example of what the HUD might look like on the HoloLens
+[![HUD Demo](http://img.youtube.com/vi/Y_ZK8V9zTaw/0.jpg)](https://youtu.be/Y_ZK8V9zTaw)
 
 ## Compiling & Running detect.cpp 
 ### Compilation
