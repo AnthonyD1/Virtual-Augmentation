@@ -1,3 +1,7 @@
+
+'''
+Note: This file was not actually used in the final parts of the project, and is therefore unfinished/not polished.
+'''
 import os,sys
 import subprocess as sub
 import struct
@@ -10,6 +14,10 @@ app = Flask(__name__)
 
 @app.route('/upload', methods=['POST'])
 
+
+'''
+Receive info posted to the webserver.
+'''
 def upload():
     print('GOT SOMETHING')
     #print(request.get_data())
@@ -27,5 +35,8 @@ def upload():
     #return outp
     return 'akfjasdflkjklesaajfslk'
 
+'''
+Start the webserver.
+'''
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
