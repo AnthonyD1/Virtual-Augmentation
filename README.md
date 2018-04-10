@@ -2,8 +2,8 @@
 A project about facial recognition, real-time heads-up-displays, and social media cross referencing.
 
 ## Index
-- [Poster](#Project Poster)
-- [Building](#Building)
+- [Poster](#project poster)
+- [Building](#building)
 
 ## Project Poster
 
