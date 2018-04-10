@@ -3,13 +3,24 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 
 ## Index
 - [Poster](#project poster)
+- [Code Compiling](#compilation)
 - [Building](#building)
 
 ## Project Poster
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
 
-## Building
+## Compiling & Running detect.cpp 
+### Compilation
+```bash
+$ g++ detect.cpp -o detect.cpp `pkg-config --cflags --libs opencv` -fopenmp -lpthread
+```
+### Running
+```bash
+$ ./detect --helpo
+```
+
+## Building for the HoloLens
 ### Build Requirements
  - Fast network connection: you need to download around 100GB of stuff to build for the HoloLens
  - CPU capable of running Hyper-V for HoloLens emulator, or a real HoloLens
