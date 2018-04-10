@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.5748171, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1392,9 +1392,6 @@ GameObject:
   - component: {fileID: 2121571821}
   - component: {fileID: 2121571820}
   - component: {fileID: 2121571818}
-  - component: {fileID: 2121571815}
-  - component: {fileID: 2121571817}
-  - component: {fileID: 2121571816}
   m_Layer: 0
   m_Name: HoloLensCamera
   m_TagString: MainCamera
@@ -1402,42 +1399,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2121571815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2121571814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5873c074a1ca57443b159fa2bd27c9f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MyText: {fileID: 1285560163}
---- !u!114 &2121571816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2121571814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 433bab2d6e53cab469dab14960b46313, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serverAddress: 10.201.4.245:8080
-  serverPath: /upload
---- !u!114 &2121571817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2121571814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ccbafb6dd135664289b3700142bf7a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2121571818
 MonoBehaviour:
   m_ObjectHideFlags: 0
