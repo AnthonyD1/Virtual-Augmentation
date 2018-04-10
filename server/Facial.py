@@ -36,7 +36,7 @@ def load_faces(path):
 
 def compare_encodings(encodings, names, enc):
     match = 'Unknown'
-    vals = face.compare_faces(encodings, enc, tolerance=0.54)
+    vals = face.compare_faces(encodings, enc, tolerance=0.5)
     if True in vals:
         match = names[vals.index(True)]
     return match
@@ -48,13 +48,19 @@ def multiprocess_comparison(e, n,ne):
     p.close()
     return retval
 
+
 dick = load_faces('all_faces.txt')
 while True:
+    enc = []
     try:
-        img = face.load_image_file('process.jpg')
-        enc = face.face_encodings(img)
-        val = multiprocess_comparison(list(dick.values()), list(dick.keys()), enc)
-        print(val)
-        os.remove('process.jpg')
+        for fil in os.listdir('faces'):
+            jod = os.path.join('faces',fil)
+            img = face.load_image_file(jod)
+            enc.append(face.face_encodings(img)[0])
+            os.remove(jod)
+        if enc:
+            val = multiprocess_comparison(list(dick.values()), list(dick.keys()), enc)
+            if val:
+                print(val)
     except:
         pass

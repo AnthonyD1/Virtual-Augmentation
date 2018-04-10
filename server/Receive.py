@@ -3,20 +3,29 @@ import subprocess as sub
 import struct
 from flask import Flask, request, render_template
 import base64 as bs
+import io
 from urllib.parse import unquote
+from PIL import Image
 app = Flask(__name__)
 
 @app.route('/upload', methods=['POST'])
 
 def upload():
-    print('Something was received...')
-    string = unquote(request.get_data(as_text=True))[5:]
-    img = bs.b64decode(string)
-    with open('tmp.jpeg','wb') as f:
-        f.write(img)
-    out = sub.check_output(['./detect', 'tmp.jpeg']).decode('ASCII').replace('\n','')
-    os.remove('tmp.jpeg')
-    return out.replace('[ INFO:0] Initialize OpenCL runtime...', '')
+    print('GOT SOMETHING')
+    #print(request.get_data())
+    #with open('shit.jpeg', 'wb') as f:
+#        f.write(request.get_data())
+#        f.close()
+    print(request.headers)
+    print(request.get_data(as_text=True))
+    with open('sadhiut.jpeg', 'w') as f:
+        f.write(request.get_data(as_text=True))
+        f.close()
+    #output = None
+    #with open('gudstuff.txt', 'r') as f:
+    #    output = f.read()
+    #return outp
+    return 'akfjasdflkjklesaajfslk'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)

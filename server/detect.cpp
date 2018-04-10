@@ -10,6 +10,7 @@
 #include <string>
 #include <array>
 #include <future>
+#include <fstream>
 
 using namespace std;
 using namespace cv;
@@ -41,7 +42,21 @@ public:
     //Remember that rectangle struct vector? Let's iterate through all the found faces
     //and draw a rectangle around them.
     for(int head = 0; head < r.size(); head++){
-      rectangle(frame, r[head].tl(), r[head].br(), Scalar(0,0,255), 2,8,0);
+      rectangle(frame, r[head].tl(), r[head].br(), Scalar(0,255,0), 2,8,0);
+      Point tl = r[head].tl();
+      Point br = r[head].br();
+      Point top(((br.x - tl.x)/2)+tl.x, tl.y);
+      Point ntop(top.x, top.y-50);
+      Point bottom(((br.x - tl.x)/2)+tl.x, br.y);
+      Point nbottom(bottom.x, bottom.y+50);
+      Point left(tl.x, ((tl.y-br.y)/2)+br.y);
+      Point nleft(left.x-50, left.y);
+      Point right(br.x, ((tl.y-br.y)/2)+br.y);
+      Point nright(right.x+50, right.y);
+      line(frame, top, ntop, Scalar(0,255,0), 2);
+      line(frame, bottom, nbottom, Scalar(0,255,0), 2);
+      line(frame, left, nleft, Scalar(0,255,0), 2);
+      line(frame, right, nright, Scalar(0,255,0),2);
     }
   }
   int headCount(vector<Rect> &r){
@@ -103,13 +118,29 @@ int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   return numHeads;
 }
 
-void writeToFile(Mat r){
-    imwrite("process.jpg", r);
+void writeToFile(Mat r, vector<Rect> heads){
+    #pragma omp parallel for
+    for(int i = 0; i < heads.size(); i++){
+      Mat lol;
+      resize(r(heads[i]), lol, Size(650,650));
+      char nut[100];
+      sprintf(nut, "faces/process%d.jpeg", i);
+      imwrite(nut, lol);
+    }
+}
+
+void writePeopleSeen(int fin){
+  ofstream myfile;
+  myfile.open("gudstuff.txt");
+  myfile << fin;
+  myfile.close();
 }
 
 void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
   Mat img;
   cap.open(0);
+  namedWindow("Feed", WINDOW_NORMAL);
+  resizeWindow("Feed", 1500,1200);
   if(!cap.isOpened()){
     cout << "Couldn't find the webcam..." << endl;
     exit(0);
@@ -122,19 +153,20 @@ void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
     cvtColor(img, tmp, CV_BGR2GRAY);
     //ied equalized and grayscaled image.
     vector<Rect> fheads = people.detectHead(tmp);
-
+    writePeopleSeen(fheads.size());
     //Draw the found faces on the original image, if any.
     people.drawHeads(img,fheads);
     //Display the colored image with the drawn faces.
     if(demo){
-      if(counter > 5){
+      if(counter > 20){
         counter = 0;
-        std::future<void> result(std::async(writeToFile, img));
+        std::future<void> result(std::async(writeToFile, img, fheads));
       }
       else{
         counter++;
       }
     }
+    resize(img,img,Size(4000,2250));
     imshow("Feed", img);
     const char key = (char) waitKey(1);
     if(key == 27 || key == 'q'){
