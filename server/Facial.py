@@ -1,5 +1,14 @@
 
-
+'''
+###########################################
+############# Made by Paul D. #############
+###########################################
+With respect to the following library 
+creators of: 
+    -OpenCV
+    -face_recognition
+###########################################
+'''
 import face_recognition as face
 from multiprocessing import Process, Queue, Pool
 import cv2 as cv
@@ -13,6 +22,8 @@ Creates a pickled dictionary list with names and face encodings of people.
 Arguments:
     -path <== Path to directory with people's faces.
     -pname <== Name the user wishes to call the file.
+Returns:
+    -Nothing.
 '''
 def create_faces(path, pname):
     new_dict = {}
@@ -42,6 +53,8 @@ Load the faces of a pickled dictionary list with people's face encodings.
 ------------------------------------------------------------------------
 Arguments:
     -path <== Path to file.
+Returns:
+    -Dictionary data type containing names of people and their respective facial encodings.
 '''
 def load_faces(path):
     dic_obj = {}
@@ -56,6 +69,8 @@ Arguments:
     -encodings <== List of all known facial encodings.
     -names <== Names corresponding to the facial encodings.
     -enc <== Facial encoding to be compared.
+Returns:
+    -Names of people found in facial recognition.
 '''
 def compare_encodings(encodings, names, enc):
     match = 'Unknown'
@@ -71,6 +86,8 @@ Arguments:
     -e <== List of all known facial encodings.
     -n <== Names corresponding to the facial encodings.
     -ne <== Facial encoding to be compared.
+Returns:
+    -Names of people found in facial recognition.
 '''
 def multiprocess_comparison(e, n,ne):
     p = Pool(4)
