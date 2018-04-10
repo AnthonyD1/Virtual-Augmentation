@@ -5,7 +5,7 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 - [Poster](#Project Poster)
 - [Building](#Building)
 
-##Project Poster
+## Project Poster
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
 
