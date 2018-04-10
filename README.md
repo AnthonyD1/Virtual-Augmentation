@@ -2,11 +2,11 @@
 A project about facial recognition, real-time heads-up-displays, and social media cross referencing.
 
 ## Index
-- [Poster](#project poster)
+- [Poster](#poster)
 - [Code Compiling](#compilation)
 - [Building](#building)
 
-## Project Poster
+## Poster
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
 
@@ -17,7 +17,7 @@ $ g++ detect.cpp -o detect.cpp `pkg-config --cflags --libs opencv` -fopenmp -lpt
 ```
 ### Running
 ```bash
-$ ./detect --help
+$ ./detect --helpo
 ```
 
 ## Building for the HoloLens
