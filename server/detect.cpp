@@ -2,6 +2,10 @@
 #######################################
 #########Code made by Paul D.##########
 #######################################
+With respect to the following library 
+creators,shout outs: 
+  -OpenCV libraries
+#######################################
 **/
 
 //These libraries are for the face detection
@@ -39,15 +43,21 @@ class People{
   //Our main face classifier.
   CascadeClassifier headDetector;
 public:
+  /**
+    Constructor to initialize the cascade classifier.
+  **/
   People(){
     //Loading the default haarcascade classifier for frontal based detection.
     headDetector.load("haarcascade_frontalface_default.xml");
   }
+  
   /**
   Detect people's faces, and return a vector of everybody's face locations.
   ----------------------------------------------------------------------------
   Arguments:
     -InputArray img <== Mat image from a OpenCV capture object.
+  Returns:
+    -Vector of rectangle coordinates for each person's face.
   **/
   vector<Rect> detectHead(InputArray img){
     vector<Rect> temp;
@@ -70,6 +80,8 @@ public:
   Arguments:
     -Mat &frame <== Reference to image frame captured from OpenCV Capture object.
     -vector<Rect> &r <== Reference to a vector of rectangle coordinates.
+  Returns:
+    -Nothing
   **/
   void drawHeads(Mat & frame, vector<Rect> &r){
     //Remember that rectangle struct vector? Let's iterate through all the found faces
@@ -98,6 +110,8 @@ public:
   --------------------------------------------------------------------------------------------
   Arguments:
     -vector<Rect> &r <== Reference to a vector of rectangle coordinates.
+  Returns:
+    -Integer representing the number of people seen.
   **/
   int headCount(vector<Rect> &r){
     //Simply get number of people that the program found in the image frame.
@@ -110,6 +124,8 @@ public:
   Arguments:
     -Mat &of <== Reference to image frame captured from OpenCV Capture object.
     -vector<Rect> &r <== Reference to a vector of rectangle coordinates.
+  Returns:
+    -Vector of matrices representing images of people's faces.
   **/
   vector<Mat> headImages(Mat &of, vector<Rect> &faces){
     vector<Mat> fimages;
@@ -126,6 +142,8 @@ Function to execute a system command, and return it's output.
 ------------------------------------------------------------
 Arguments:
   -const char* cmd <== Command to be run. 
+Returns:
+  -String result of what was returned from the system command.
 **/
 string exec(const char* cmd) {
     std::array<char, 128> buffer;
@@ -150,6 +168,8 @@ Perform detection on an image.
         -- "0" <== Only number of faces.
         -- "1" <== Number of faces, and picture is displayed with graphics drawn around faces.
         -- "2" <== Number of faces & coordinates of faces, plus picture is displayed with graphics drawn around faces.
+ Returns:
+    -Integer representing the number of people seen in the image.
 **/
 int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   cap.open(path);
@@ -191,6 +211,8 @@ int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   Arguments:
     -Mat r <== Image frame.
     -vector<Rect> heads <== Vector of rentangle coordinates of people's faces.
+  Returns:
+    -Nothing.
 **/
 void writeToFile(Mat r, vector<Rect> heads){
     #pragma omp parallel for
@@ -208,6 +230,8 @@ Write the headcount of people seen to a file for processing.
 -------------------------------------------------------------
 Arguments:
   -int fin <== Number of people seen in an image. 
+Returns:
+  -Nothing.
 **/
 void writePeopleSeen(int fin){
   ofstream myfile;
@@ -223,6 +247,8 @@ void writePeopleSeen(int fin){
     -VideoCapture & cap <== Reference to a video capture object. 
     -People &people <== Reference to a People object.
     -bool demo <== Set to TRUE if you want facial features to be written to a file, FALSE if you just want to do normal processing.
+  Returns:
+    -Nothing.
 **/
 void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
   Mat img;
@@ -267,6 +293,7 @@ void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
 }
 
 //Print out the usage of the program for the user
+//Returns nothing.
 void usage(){
   cout << "./detect <== Uses default camera to perform real-time face detection" << endl;
   cout << "./detect <picture to detect faces on> <== Return a count of people's faces in an image" << endl;
@@ -274,6 +301,7 @@ void usage(){
   cout << "./detect <picture to detect faces on> 2 <== Display image with graphics, top left & bottom right coordinates and number of faces outputted" << endl;
 }
 
+//Main function, returns integer result of program flow (but you already knew that).
 int main(int argc, char** argv){
   VideoCapture cap;
   People people;
