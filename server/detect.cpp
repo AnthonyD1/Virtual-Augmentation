@@ -1,8 +1,16 @@
+/**
+#######################################
+#########Code made by Paul D.##########
+#######################################
+**/
+
+//These libraries are for the face detection
 #include <opencv2/objdetect.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/video.hpp>
 #include <opencv2/videoio.hpp>
+//Used for handling file logic, vectors, etc.
 #include <iostream>
 #include <iomanip>
 #include <memory>
@@ -12,17 +20,35 @@
 #include <future>
 #include <fstream>
 
+/**
+Some people will complain about using the
+namespaces for both std and cv as being 
+bad practice. But for simplicity, I did.
+**/
+
 using namespace std;
 using namespace cv;
 
+/**
+This is the primary class for detecting people's faces, as 
+well as any other feature detection that we wanted to do. 
+Plus, the class also provides drawing functions for all the 
+features. 
+**/
 class People{
+  //Our main face classifier.
   CascadeClassifier headDetector;
 public:
   People(){
     //Loading the default haarcascade classifier for frontal based detection.
     headDetector.load("haarcascade_frontalface_default.xml");
   }
-
+  /**
+  Detect people's faces, and return a vector of everybody's face locations.
+  ----------------------------------------------------------------------------
+  Arguments:
+    -InputArray img <== Mat image from a OpenCV capture object.
+  **/
   vector<Rect> detectHead(InputArray img){
     vector<Rect> temp;
     /**
@@ -38,6 +64,13 @@ public:
     return temp;
   }
 
+  /**
+  Given a vector of rectangle points, it will draw a custom design over each person's face.
+  ----------------------------------------------------------------------------------------
+  Arguments:
+    -Mat &frame <== Reference to image frame captured from OpenCV Capture object.
+    -vector<Rect> &r <== Reference to a vector of rectangle coordinates.
+  **/
   void drawHeads(Mat & frame, vector<Rect> &r){
     //Remember that rectangle struct vector? Let's iterate through all the found faces
     //and draw a rectangle around them.
@@ -59,10 +92,25 @@ public:
       line(frame, right, nright, Scalar(0,255,0),2);
     }
   }
+  
+  /**
+  Returns how many people's faces were found, from the length of an image's rectangle structs.
+  --------------------------------------------------------------------------------------------
+  Arguments:
+    -vector<Rect> &r <== Reference to a vector of rectangle coordinates.
+  **/
   int headCount(vector<Rect> &r){
     //Simply get number of people that the program found in the image frame.
     return r.size();
   }
+  
+  /**
+  Crops out peoples faces, and puts them in a vector of matrices so they can be displayed individually.
+  ----------------------------------------------------------------------------------------------------
+  Arguments:
+    -Mat &of <== Reference to image frame captured from OpenCV Capture object.
+    -vector<Rect> &r <== Reference to a vector of rectangle coordinates.
+  **/
   vector<Mat> headImages(Mat &of, vector<Rect> &faces){
     vector<Mat> fimages;
     for(int i = 0; i < faces.size(); ++i){
@@ -71,7 +119,14 @@ public:
     return fimages;
   }
 };
+//END OF PEOPLE CLASS
 
+/**
+Function to execute a system command, and return it's output.
+------------------------------------------------------------
+Arguments:
+  -const char* cmd <== Command to be run. 
+**/
 string exec(const char* cmd) {
     std::array<char, 128> buffer;
     std::string result;
@@ -84,6 +139,18 @@ string exec(const char* cmd) {
     return result;
 }
 
+/**
+Perform detection on an image.
+------------------------------
+ Arguments:
+    -VideoCapture & cap <== Reference to a video capture object. 
+    -People &people <== Reference to a People object.
+    -char *path <== Path to image file.
+    -int show <== Number representing levels of processing.
+        -- "0" <== Only number of faces.
+        -- "1" <== Number of faces, and picture is displayed with graphics drawn around faces.
+        -- "2" <== Number of faces & coordinates of faces, plus picture is displayed with graphics drawn around faces.
+**/
 int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   cap.open(path);
   Mat tmp;
@@ -107,7 +174,7 @@ int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
     equalizeHist(tmp, tmp);
     fheads = people.detectHead(tmp);
   }
-  if(show > 1){
+  if(show >= 1){
     for(int i = 0; i < fheads.size(); ++i){
       cout << fheads[i].tl() << ", " << fheads[i].br() << endl;
     }
@@ -118,6 +185,13 @@ int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   return numHeads;
 }
 
+/**
+  Write a matrices of people's faces to individual files and resize them to 650px by 650px for processing. 
+  --------------------------------------------------------------------------------------------------------
+  Arguments:
+    -Mat r <== Image frame.
+    -vector<Rect> heads <== Vector of rentangle coordinates of people's faces.
+**/
 void writeToFile(Mat r, vector<Rect> heads){
     #pragma omp parallel for
     for(int i = 0; i < heads.size(); i++){
@@ -129,13 +203,27 @@ void writeToFile(Mat r, vector<Rect> heads){
     }
 }
 
+/**
+Write the headcount of people seen to a file for processing.
+-------------------------------------------------------------
+Arguments:
+  -int fin <== Number of people seen in an image. 
+**/
 void writePeopleSeen(int fin){
   ofstream myfile;
-  myfile.open("gudstuff.txt");
+  myfile.open("Seen.txt");
   myfile << fin;
   myfile.close();
 }
 
+/**
+  Perform real-time face detection on a system's webcam.
+  --------------------------------------------------------
+  Arguments:
+    -VideoCapture & cap <== Reference to a video capture object. 
+    -People &people <== Reference to a People object.
+    -bool demo <== Set to TRUE if you want facial features to be written to a file, FALSE if you just want to do normal processing.
+**/
 void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
   Mat img;
   cap.open(0);
@@ -153,7 +241,9 @@ void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
     cvtColor(img, tmp, CV_BGR2GRAY);
     //ied equalized and grayscaled image.
     vector<Rect> fheads = people.detectHead(tmp);
-    writePeopleSeen(fheads.size());
+    if(demo){
+      writePeopleSeen(fheads.size());
+    }
     //Draw the found faces on the original image, if any.
     people.drawHeads(img,fheads);
     //Display the colored image with the drawn faces.
@@ -176,40 +266,25 @@ void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
   }
 }
 
+//Print out the usage of the program for the user
 void usage(){
-  cout << "./detect <picture to detect faces on> <'true' to show frame, 'false' to just use console>" << endl;
+  cout << "./detect <== Uses default camera to perform real-time face detection" << endl;
+  cout << "./detect <picture to detect faces on> <== Return a count of people's faces in an image" << endl;
+  cout << "./detect <picture to detect faces on> 1 <== Display image with graphics on people's faces, and number of faces is outputted" << endl;
+  cout << "./detect <picture to detect faces on> 2 <== Display image with graphics, top left & bottom right coordinates and number of faces outputted" << endl;
 }
-/**
-int main(int argc, char** argv){
-  VideoCapture cap;
-  People people;
-  Mat tmp;
-  Mat img;
-  cap.open("Paul.jpeg");
-  if(!cap.isOpened()){
-    cout << "Failed!" << endl;
-    return -1;
-  }
-  cap >> tmp;
-  cvtColor(tmp, img, CV_BGR2GRAY)
-  equalizeHist(img, img);
-  vector<Rect> headshots = people.detectHead(img);
-  vector<Mat> peeps = people.headImages(tmp,headshots);
-  for(int i = 0; i < peeps.size(); i++){
-      imshow("Feed", peeps[i]);
-  }
-  waitKey(1);
-  cin.get();
-  return 0;
 
-}**/
 int main(int argc, char** argv){
   VideoCapture cap;
   People people;
   int out = 0;
+  if (argc > 1) && (argv[2] == "--help"){
+    usage();
+    return -1;
+  }
   switch(argc){
     case 1:
-      cameraDetect(cap, people, true);
+      cameraDetect(cap, people, false);
       break;
     case 2:
       out = pictureDetect(cap, people, argv[1], 0);
