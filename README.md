@@ -1,14 +1,11 @@
 # Virtual-Augmentation
 A project about facial recognition, real-time heads-up-displays, and social media cross referencing.
 
-<<<<<<< Updated upstream
-## Project Poster
-=======
 ## Index
-- [Poster](# Project Poster)
+- [Poster](#Project Poster)
+- [Building](#Building)
 
 ##Project Poster
->>>>>>> Stashed changes
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
 
@@ -16,7 +13,7 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 ### Build Requirements
  - Fast network connection: you need to download around 100GB of stuff to build for the HoloLens
  - CPU capable of running Hyper-V for HoloLens emulator, or a real HoloLens
-    
+
  - Windows 10
     - Must be Pro or Enterprise version
     - Build number 10.0.16299 or newer
