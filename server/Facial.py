@@ -1,10 +1,19 @@
+
+
 import face_recognition as face
-from multiprocessing import Process, Queue, Pool, Manager
+from multiprocessing import Process, Queue, Pool
 import cv2 as cv
 import os
 from functools import partial
 import _pickle as pickle
 
+'''
+Creates a pickled dictionary list with names and face encodings of people.
+-------------------------------------------------------------------------
+Arguments:
+    -path <== Path to directory with people's faces.
+    -pname <== Name the user wishes to call the file.
+'''
 def create_faces(path, pname):
     new_dict = {}
     for fil in os.listdir(path):
@@ -28,12 +37,26 @@ def create_faces(path, pname):
         except:
             print('Error dumping facial encodings!')
 
+'''
+Load the faces of a pickled dictionary list with people's face encodings.
+------------------------------------------------------------------------
+Arguments:
+    -path <== Path to file.
+'''
 def load_faces(path):
     dic_obj = {}
     with open(path, 'rb') as stuff:
         dic_obj = pickle.load(stuff)
     return dic_obj
 
+'''
+Compare a facial encoding with a list of other facial encodings and retrieve a possible name for the match.
+-----------------------------------------------------------------------------------------------------------
+Arguments:
+    -encodings <== List of all known facial encodings.
+    -names <== Names corresponding to the facial encodings.
+    -enc <== Facial encoding to be compared.
+'''
 def compare_encodings(encodings, names, enc):
     match = 'Unknown'
     vals = face.compare_faces(encodings, enc, tolerance=0.5)
@@ -41,6 +64,14 @@ def compare_encodings(encodings, names, enc):
         match = names[vals.index(True)]
     return match
 
+'''
+Function to multiprocess the compare_encodings function.
+--------------------------------------------------------
+Arguments:
+    -e <== List of all known facial encodings.
+    -n <== Names corresponding to the facial encodings.
+    -ne <== Facial encoding to be compared.
+'''
 def multiprocess_comparison(e, n,ne):
     p = Pool(4)
     args = partial(compare_encodings,e,n)
@@ -49,7 +80,12 @@ def multiprocess_comparison(e, n,ne):
     return retval
 
 
-dick = load_faces('all_faces.txt')
+'''
+Main loop.
+Will need to be changed if used with other projects, since it's written for this project only.
+All other functions should be able to work with other projects as is, though.
+'''
+file_dict = load_faces('all_faces.txt')
 while True:
     enc = []
     try:
@@ -59,7 +95,7 @@ while True:
             enc.append(face.face_encodings(img)[0])
             os.remove(jod)
         if enc:
-            val = multiprocess_comparison(list(dick.values()), list(dick.keys()), enc)
+            val = multiprocess_comparison(list(file_dict.values()), list(file_dict.keys()), enc)
             if val:
                 print(val)
     except:
