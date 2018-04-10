@@ -1,7 +1,14 @@
 # Virtual-Augmentation
 A project about facial recognition, real-time heads-up-displays, and social media cross referencing.
 
+<<<<<<< Updated upstream
 ## Project Poster
+=======
+## Index
+- [Poster](# Project Poster)
+
+##Project Poster
+>>>>>>> Stashed changes
 
 ![Project Poster](https://github.com/pdemange/Virtual-Augmentation/raw/master/Poster.png "Project Poster")
 
