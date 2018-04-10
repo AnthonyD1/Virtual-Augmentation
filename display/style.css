@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Serif+Pro');
+
+body {
+    text-align: center;
+    font-family: 'Source Serif Pro', serif;
+}
+
+.box {
+    padding: 12px;
+    border-radius: 24px;
+}
+
+.purple {
+    background-color: #523178;
+    color: white;
+}
+
+.hfill {
+    width: calc(100%);
+}
+
+.vfill {
+    height: 100%;
+}
+
+table {
+    table-layout: fixed;
+}
+
+.bignumber {
+    font-size: 25vh;
+}
+
+td {
+    height: 100%;
+    vertical-align: top;
+}
+
+#people-list {
+    text-align: left;
+}
+
+#people-list-box, #people-count-box {
+    height: 40vh;
+}
+
+.face-image {
+    height: 28vh;
+    padding-right: 5px;
+}
+
+#images {
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 30vh;
+    white-space: nowrap;
+}
