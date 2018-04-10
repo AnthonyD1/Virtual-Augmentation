@@ -5,6 +5,12 @@
 #include <opencv2/videoio.hpp>
 #include <iostream>
 #include <iomanip>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
+#include <future>
+#include <fstream>
 
 using namespace std;
 using namespace cv;
@@ -16,6 +22,7 @@ public:
     //Loading the default haarcascade classifier for frontal based detection.
     headDetector.load("haarcascade_frontalface_default.xml");
   }
+
   vector<Rect> detectHead(InputArray img){
     vector<Rect> temp;
     /**
@@ -30,18 +37,52 @@ public:
     headDetector.detectMultiScale(img, temp, 1.1, 8, 1);
     return temp;
   }
+
   void drawHeads(Mat & frame, vector<Rect> &r){
     //Remember that rectangle struct vector? Let's iterate through all the found faces
     //and draw a rectangle around them.
     for(int head = 0; head < r.size(); head++){
-      rectangle(frame, r[head].tl(), r[head].br(), Scalar(0,0,255), 2,8,0);
+      rectangle(frame, r[head].tl(), r[head].br(), Scalar(0,255,0), 2,8,0);
+      Point tl = r[head].tl();
+      Point br = r[head].br();
+      Point top(((br.x - tl.x)/2)+tl.x, tl.y);
+      Point ntop(top.x, top.y-50);
+      Point bottom(((br.x - tl.x)/2)+tl.x, br.y);
+      Point nbottom(bottom.x, bottom.y+50);
+      Point left(tl.x, ((tl.y-br.y)/2)+br.y);
+      Point nleft(left.x-50, left.y);
+      Point right(br.x, ((tl.y-br.y)/2)+br.y);
+      Point nright(right.x+50, right.y);
+      line(frame, top, ntop, Scalar(0,255,0), 2);
+      line(frame, bottom, nbottom, Scalar(0,255,0), 2);
+      line(frame, left, nleft, Scalar(0,255,0), 2);
+      line(frame, right, nright, Scalar(0,255,0),2);
     }
   }
   int headCount(vector<Rect> &r){
     //Simply get number of people that the program found in the image frame.
     return r.size();
   }
+  vector<Mat> headImages(Mat &of, vector<Rect> &faces){
+    vector<Mat> fimages;
+    for(int i = 0; i < faces.size(); ++i){
+      fimages.push_back(of(faces[i]));
+    }
+    return fimages;
+  }
 };
+
+string exec(const char* cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (!feof(pipe.get())) {
+        if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
+            result += buffer.data();
+    }
+    return result;
+}
 
 int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   cap.open(path);
@@ -66,8 +107,10 @@ int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
     equalizeHist(tmp, tmp);
     fheads = people.detectHead(tmp);
   }
-  for(int i = 0; i < fheads.size(); ++i){
-    cout << fheads[i].tl() << ", " << fheads[i].br() << endl;
+  if(show > 1){
+    for(int i = 0; i < fheads.size(); ++i){
+      cout << fheads[i].tl() << ", " << fheads[i].br() << endl;
+    }
   }
   //cout << "Head count: " << people.headCount(fheads) << endl;
   int numHeads = people.headCount(fheads);
@@ -75,13 +118,34 @@ int pictureDetect(VideoCapture & cap, People &people, char *path, int show){
   return numHeads;
 }
 
-void cameraDetect(VideoCapture & cap, People &people){
+void writeToFile(Mat r, vector<Rect> heads){
+    #pragma omp parallel for
+    for(int i = 0; i < heads.size(); i++){
+      Mat lol;
+      resize(r(heads[i]), lol, Size(650,650));
+      char nut[100];
+      sprintf(nut, "faces/process%d.jpeg", i);
+      imwrite(nut, lol);
+    }
+}
+
+void writePeopleSeen(int fin){
+  ofstream myfile;
+  myfile.open("gudstuff.txt");
+  myfile << fin;
+  myfile.close();
+}
+
+void cameraDetect(VideoCapture & cap, People &people, bool demo=false){
   Mat img;
   cap.open(0);
+  namedWindow("Feed", WINDOW_NORMAL);
+  resizeWindow("Feed", 1500,1200);
   if(!cap.isOpened()){
     cout << "Couldn't find the webcam..." << endl;
     exit(0);
   }
+  int counter = 0;
   while(true){
     cap >> img;
     Mat tmp;
@@ -89,10 +153,20 @@ void cameraDetect(VideoCapture & cap, People &people){
     cvtColor(img, tmp, CV_BGR2GRAY);
     //ied equalized and grayscaled image.
     vector<Rect> fheads = people.detectHead(tmp);
-
+    writePeopleSeen(fheads.size());
     //Draw the found faces on the original image, if any.
     people.drawHeads(img,fheads);
     //Display the colored image with the drawn faces.
+    if(demo){
+      if(counter > 20){
+        counter = 0;
+        std::future<void> result(std::async(writeToFile, img, fheads));
+      }
+      else{
+        counter++;
+      }
+    }
+    resize(img,img,Size(4000,2250));
     imshow("Feed", img);
     const char key = (char) waitKey(1);
     if(key == 27 || key == 'q'){
@@ -105,23 +179,48 @@ void cameraDetect(VideoCapture & cap, People &people){
 void usage(){
   cout << "./detect <picture to detect faces on> <'true' to show frame, 'false' to just use console>" << endl;
 }
-
+/**
 int main(int argc, char** argv){
   VideoCapture cap;
   People people;
-  int param;
+  Mat tmp;
+  Mat img;
+  cap.open("Paul.jpeg");
+  if(!cap.isOpened()){
+    cout << "Failed!" << endl;
+    return -1;
+  }
+  cap >> tmp;
+  cvtColor(tmp, img, CV_BGR2GRAY)
+  equalizeHist(img, img);
+  vector<Rect> headshots = people.detectHead(img);
+  vector<Mat> peeps = people.headImages(tmp,headshots);
+  for(int i = 0; i < peeps.size(); i++){
+      imshow("Feed", peeps[i]);
+  }
+  waitKey(1);
+  cin.get();
+  return 0;
+
+}**/
+int main(int argc, char** argv){
+  VideoCapture cap;
+  People people;
+  int out = 0;
   switch(argc){
+    case 1:
+      cameraDetect(cap, people, true);
+      break;
     case 2:
-      param = 0;
+      out = pictureDetect(cap, people, argv[1], 0);
       break;
     case 3:
-      param = atoi(argv[2]);
+      out = pictureDetect(cap, people, argv[1], atoi(argv[2]));
       break;
     default:
       usage();
       return -1;
   }
-  int out = pictureDetect(cap, people, argv[1], param);
-  cout << out << " people..." << endl;
+  cout << out << endl;
   return 0;
 }
