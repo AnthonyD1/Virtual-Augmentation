@@ -5,6 +5,7 @@ A project about facial recognition, real-time heads-up-displays, and social medi
 - [Poster](#poster)
 - [Code Compiling](#compilation)
 - [Building](#building)
+- [Resources](#resources)
 
 ## Poster
 
@@ -68,3 +69,9 @@ To build for the real HoloLens, you need to put it into Developer Mode. On the H
 1. Start → Settings → Update & Security → For developers
 1. Turn Developer mode on
 1. It's also handy to turn Device Portal on
+
+## Resources
+Resources used for this project:
+- Unity APIs available with Unity Editor
+- Microsoft Mixed Reality Toolkit for Unity (contained in this repository)
+- jQuery for the presentation display
