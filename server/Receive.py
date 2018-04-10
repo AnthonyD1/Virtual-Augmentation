@@ -17,6 +17,7 @@ app = Flask(__name__)
 
 '''
 Receive info posted to the webserver.
+Returns a response to the client.
 '''
 def upload():
     print('GOT SOMETHING')
@@ -37,6 +38,7 @@ def upload():
 
 '''
 Start the webserver.
+Returns nothing.
 '''
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
