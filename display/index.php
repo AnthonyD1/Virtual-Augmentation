@@ -6,7 +6,7 @@
     <body>
         <div class="box purple">
             <h1>Virtual Augmentation</h1>
-            <p>Paul DeMange, Cole Horner, and Joe Tortorello<br />
+            <p>pdemange, colehorner, and NotTheRealJoe<br />
             Professor Ross Sowell</p>
         </div>
         <table class="hfill">
