@@ -39,3 +39,6 @@ App/
 
 # Some visual studio shit
 .vs/
+
+#PhpStorm (from making the display page)
+.idea/
