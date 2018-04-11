@@ -42,3 +42,6 @@ App/
 
 #PhpStorm (from making the display page)
 .idea/
+
+# Fonts directory, may have copyright issues
+Assets/Fonts/
